@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Nim
+        uses: jason56789/setup-nim@v1
+        with:
+          nim-version: '2.2.0'
+
+      - name: Verify Environment
+        run: |
+          nim -v
+          gcc --version
+
+      - name: Tab Check
+        run: |
+          nimble tabcheck
+
+      - name: Build Isvik Binary
+        run: |
+          nimble build
+
+      - name: Run Test Suites
+        run: |
+          nimble test

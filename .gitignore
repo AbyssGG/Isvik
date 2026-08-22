@@ -1,0 +1,33 @@
+# 构建产物
+build/
+nimcache/
+.nimcache/
+dist/
+bin/
+
+# 可执行与目标文件
+*.exe
+*.dll
+*.obj
+*.o
+*.pdb
+*.ilk
+
+# Nimble 本地状态
+nimbledeps/
+nimble.develop
+nimble.paths
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 运行时数据(不应进入版本库)
+# Isvik 默认数据目录是 ~/.isvik,不在仓库内;
+# 此项仅防止开发时通过 ISVIK_HOME 指向仓库子目录后误提交。
+.isvik/
+
+# OpenVINO Runtime 本体(约 195 MB,不进版本库)
+# 见 README「OpenVINO Runtime 的获取与定位」。
+runtime/
