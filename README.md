@@ -1,6 +1,10 @@
 # Isvik
 
 <p align="center">
+  <img src="./Isvik.png" alt="Isvik" width="100%">
+</p>
+
+<p align="center">
   <strong style="font-size: 1.5em;">High-Performance Native Local AI Inference Runtime for Intel AI PCs</strong>
   <br>
   <i>100% Pure Nim · Zero Python Runtime Dependency · Built on Intel OpenVINO C API · Tailored for CPU / iGPU / NPU</i>

@@ -1,6 +1,10 @@
 # Isvik
 
 <p align="center">
+  <img src="./Isvik.png" alt="Isvik" width="100%">
+</p>
+
+<p align="center">
   <strong style="font-size: 1.5em;">面向 Intel AI PC 的高性能原生本地 AI 推理平台与多协议运行时</strong>
   <br>
   <i>100% 纯 Nim 实现 · 零 Python 依赖 · 基于 Intel OpenVINO C API · 深度适配 CPU / iGPU / NPU</i>
