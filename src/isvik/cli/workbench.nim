@@ -23,6 +23,14 @@ import isvik/cli/cmd_devices
 import isvik/cli/cmd_doctor
 import isvik/cli/cmd_api
 
+const IsvikAsciiArt = [
+  " ___  ____  __     __ ___  _  __",
+  "|_ _|/ ___| \\ \\   / /|_ _|| |/ /",
+  " | | \\___ \\  \\ \\ / /  | | | ' /",
+  " | |  ___) |  \\ V /   | | | . \\",
+  "|___||____/    \\_/   |___||_|\\_\\"
+]
+
 type
   WorkbenchReadLine* = proc(line: var string): bool {.closure.}
   WorkbenchWrite* = proc(text: string) {.closure.}
@@ -180,6 +188,8 @@ proc chooseStartupLanguage*(ctx: CliContext, io: WorkbenchIo): bool =
 
 proc printBanner(ctx: CliContext, io: WorkbenchIo, state: WorkbenchState) =
   io.writeLine("")
+  for line in IsvikAsciiArt:
+    io.writeLine(line)
   io.writeLine("ISVIK " & IsvikVersion & "  |  " & ctx.t("workbench.title"))
   io.writeLine(ctx.t("workbench.identity"))
   io.writeLine(ctx.t("workbench.status",

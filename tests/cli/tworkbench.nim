@@ -6,6 +6,7 @@
 import std/[os, strutils, unittest]
 
 import isvik/core/errors
+import isvik/version
 import isvik/config/paths
 import isvik/config/settings
 import isvik/cli/context
@@ -241,7 +242,9 @@ suite "无模型工作台":
     let terminal = newScriptTerminal(["2", "-help", "-lang zh", "-exit"])
 
     check runWorkbench(ctx, ioFor(terminal)) == ExitSuccess
-    check terminal.output.contains("Local AI Workbench")
+    check terminal.output.contains(" ___  ____  __     __ ___  _  __")
+    check terminal.output.contains("|___||____/    \\_/   |___||_|\\_\\")
+    check terminal.output.contains("ISVIK " & IsvikVersion & "  |  Local AI Workbench")
     check terminal.output.contains("-use <#|id|dir>")
     check terminal.output.contains("-stop")
     check terminal.output.contains("已退出 Isvik 工作台")
