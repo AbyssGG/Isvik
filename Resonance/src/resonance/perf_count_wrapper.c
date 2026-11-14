@@ -5,8 +5,8 @@
  * x64 the OpenVINO DLL is built with MSVC, while Nim projects are commonly
  * built with MinGW/TDM-GCC. Variadic calls crossing those ABIs are fragile.
  *
- * We resolve the original symbols with GetProcAddress and expose stable,
- * non-variadic cdecl wrappers that Nim can call safely.
+ * We resolve the original symbols with the platform loader and expose stable,
+ * non-variadic wrappers that Nim can call safely.
  *
  * ---------------------------------------------------------------------------
  * Why the property count is switched over instead of forwarded dynamically
@@ -23,6 +23,17 @@
 
 #include <stddef.h>
 
+#ifdef _WIN32
+#define NV_ABI __attribute__((ms_abi))
+#define NV_EXPORT __declspec(dllexport)
+#define NV_CALL __cdecl
+#else
+#include <dlfcn.h>
+#define NV_ABI
+#define NV_EXPORT
+#define NV_CALL
+#endif
+
 typedef struct ov_core ov_core_t;
 typedef struct ov_model ov_model_t;
 typedef struct ov_compiled_model ov_compiled_model_t;
@@ -36,11 +47,11 @@ typedef int ov_status_e;
 /* Maximum number of key/value pairs the switch below can forward. */
 #define NV_MAX_PROPERTY_PAIRS 8
 
-typedef __attribute__((ms_abi)) ov_status_e (*nv_compile_model_fn)(
+typedef NV_ABI ov_status_e (*nv_compile_model_fn)(
     const ov_core_t*, const ov_model_t*, const char*, size_t, ...);
-typedef __attribute__((ms_abi)) ov_status_e (*nv_compiled_set_property_fn)(
+typedef NV_ABI ov_status_e (*nv_compiled_set_property_fn)(
     ov_compiled_model_t*, ...);
-typedef __attribute__((ms_abi)) ov_status_e (*nv_core_set_property_fn)(
+typedef NV_ABI ov_status_e (*nv_core_set_property_fn)(
     const ov_core_t*, const char*, ...);
 
 static nv_compile_model_fn g_compile_model = NULL;
@@ -48,20 +59,28 @@ static nv_compiled_set_property_fn g_compiled_set_property = NULL;
 static nv_core_set_property_fn g_core_set_property = NULL;
 static int g_resolved = 0;
 
+#ifdef _WIN32
 typedef struct HINSTANCE__* HINSTANCE;
 __declspec(dllimport) HINSTANCE __stdcall LoadLibraryA(const char*);
 __declspec(dllimport) void* __stdcall GetProcAddress(HINSTANCE, const char*);
+#endif
 
 static int nv_resolve_symbols(void)
 {
     if (g_resolved) return 1;
+#ifdef _WIN32
     HINSTANCE mod = LoadLibraryA("openvino_c.dll");
+#define NV_SYMBOL(handle, name) GetProcAddress(handle, name)
+#else
+    void* mod = dlopen("libopenvino_c.so", RTLD_LAZY | RTLD_LOCAL);
+#define NV_SYMBOL(handle, name) dlsym(handle, name)
+#endif
     if (!mod) return 0;
-    g_compile_model = (nv_compile_model_fn)GetProcAddress(mod, "ov_core_compile_model");
+    g_compile_model = (nv_compile_model_fn)NV_SYMBOL(mod, "ov_core_compile_model");
     g_compiled_set_property =
-        (nv_compiled_set_property_fn)GetProcAddress(mod, "ov_compiled_model_set_property");
+        (nv_compiled_set_property_fn)NV_SYMBOL(mod, "ov_compiled_model_set_property");
     g_core_set_property =
-        (nv_core_set_property_fn)GetProcAddress(mod, "ov_core_set_property");
+        (nv_core_set_property_fn)NV_SYMBOL(mod, "ov_core_set_property");
     /* Only the two symbols the legacy entry points need are required for
      * g_resolved; ov_core_set_property is checked per call so that an older
      * runtime missing it degrades to an error instead of failing everything. */
@@ -69,7 +88,7 @@ static int nv_resolve_symbols(void)
     return g_resolved;
 }
 
-__declspec(dllexport) int __cdecl nv_max_property_pairs(void)
+NV_EXPORT int NV_CALL nv_max_property_pairs(void)
 {
     return NV_MAX_PROPERTY_PAIRS;
 }
@@ -78,7 +97,7 @@ __declspec(dllexport) int __cdecl nv_max_property_pairs(void)
 /* Legacy entry points (kept so existing callers keep working)               */
 /* ------------------------------------------------------------------------- */
 
-__declspec(dllexport) ov_status_e __cdecl nv_compile_model_with_perf_count(
+NV_EXPORT ov_status_e NV_CALL nv_compile_model_with_perf_count(
     const ov_core_t* core,
     const ov_model_t* model,
     const char* device_name,
@@ -88,7 +107,7 @@ __declspec(dllexport) ov_status_e __cdecl nv_compile_model_with_perf_count(
     return g_compile_model(core, model, device_name, 2, compiled_model, "PERF_COUNT", "YES");
 }
 
-__declspec(dllexport) ov_status_e __cdecl nv_enable_perf_count(
+NV_EXPORT ov_status_e NV_CALL nv_enable_perf_count(
     ov_compiled_model_t* compiled_model)
 {
     if (!nv_resolve_symbols() || g_compiled_set_property == NULL) return NV_GENERAL_ERROR;
@@ -105,7 +124,7 @@ __declspec(dllexport) ov_status_e __cdecl nv_enable_perf_count(
  * So n pairs must be passed as 2*n. The legacy wrapper above passes 2 for its
  * single pair, which confirms the convention.
  */
-__declspec(dllexport) ov_status_e __cdecl nv_compile_model_with_properties(
+NV_EXPORT ov_status_e NV_CALL nv_compile_model_with_properties(
     const ov_core_t* core,
     const ov_model_t* model,
     const char* device_name,
@@ -181,7 +200,7 @@ __declspec(dllexport) ov_status_e __cdecl nv_compile_model_with_properties(
     }
 }
 
-__declspec(dllexport) ov_status_e __cdecl nv_core_set_property(
+NV_EXPORT ov_status_e NV_CALL nv_core_set_property(
     const ov_core_t* core,
     const char* device_name,
     const char* key,

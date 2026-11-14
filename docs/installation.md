@@ -37,7 +37,16 @@ Check the script's supported selections and the model's own documentation before
 
 ## Linux status
 
-The current repository is Windows-oriented. On 2026-11-15, `nimble build` on Linux x86-64 with Nim 2.2.4 and GCC failed in the Windows-specific Resonance ABI wrapper; `nimble test` stopped at the same compilation error. No application startup or inference was verified on that system. A Linux OpenVINO installation alone does not resolve this build limitation.
+Linux x86-64 can build with Nim 2.0 or later and GCC. Install a compatible OpenVINO runtime separately and make `libopenvino_c.so` and its dependencies discoverable through the dynamic loader (for example, using the distribution's library configuration or `LD_LIBRARY_PATH`). The exact setup depends on the runtime distribution; some provide only a versioned library and require the usual unversioned development symlink. For tokenizer-based generation, supply `libopenvino_tokenizers.so` in a searched directory or set `ISVIK_TOKENIZERS_DLL` to its full path.
+
+```bash
+nimble build
+nimble test
+./isvik doctor
+./isvik devices
+```
+
+On 2026-11-15, CPU device discovery and inference with a synthetic embedding IR were verified using OpenVINO 2026.4.1. LLM generation and tokenizer integration have not yet been verified on Linux.
 
 ## Related material
 

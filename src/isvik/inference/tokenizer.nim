@@ -63,7 +63,8 @@ import isvik/core/runtime
 
 const
   TokenizerModelFile* = "openvino_tokenizer.xml"
-  TokenizerExtensionFile* = "openvino_tokenizers.dll"
+  TokenizerExtensionFile* = when defined(linux): "libopenvino_tokenizers.so"
+                            else: "openvino_tokenizers.dll"
   TokenizerExtensionEnvVar* = "ISVIK_TOKENIZERS_DLL"
     ## 显式指定 tokenizer 扩展库的环境变量。给「DLL 不在常规位置」的
     ## 环境一个不改代码的出路。

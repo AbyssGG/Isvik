@@ -196,7 +196,12 @@ const
     ## always denoted the same value -- code written against the old name stays
     ## correct.
 
-const dllName* = "openvino_c.dll"
+when defined(windows):
+  const dllName* = "openvino_c.dll"
+elif defined(linux):
+  const dllName* = "libopenvino_c.so"
+else:
+  const dllName* = "openvino_c.dll"
 
 const
   OvPropertyKeyEnableProfiling* = "PERF_COUNT"
@@ -354,7 +359,7 @@ template resolveSymbol(target: untyped, symbolName: string) =
     ovMissingSymbols.add(symbolName)
 
 proc tryLoadOpenVino*(): bool =
-  ## Loads `openvino_c.dll` and resolves all entry points.
+  ## Loads the platform OpenVINO C library and resolves all entry points.
   ##
   ## Returns whether the runtime is usable. Safe to call repeatedly: the load
   ## is attempted once and the outcome cached.
@@ -370,7 +375,7 @@ proc tryLoadOpenVino*(): bool =
 
   if ovLib == nil:
     ovLoadErrorMsg = "could not load " & dllName &
-      " (not found on PATH or a dependency is missing)"
+      " (not found in the library search path or a dependency is missing)"
     return false
 
   resolveSymbol(fnCoreCreate, "ov_core_create")

@@ -34,9 +34,9 @@ The runtime provides model import and management, device discovery and selection
 
 ## Platform and validation
 
-The repository's CI targets Windows. Prior project records describe tests on Windows x64 with Intel Core Ultra 7 270K Plus and OpenVINO 2026.3: CPU text generation and Intel GPU inference were exercised; NPU enumeration and static IR compilation were exercised, but this does not establish general NPU text-generation support. See [DEVLOG.md](DEVLOG.md) for the historical context.
+The repository's CI is configured for Windows and Linux. Prior project records describe tests on Windows x64 with Intel Core Ultra 7 270K Plus and OpenVINO 2026.3: CPU text generation and Intel GPU inference were exercised; NPU enumeration and static IR compilation were exercised, but this does not establish general NPU text-generation support. See [DEVLOG.md](DEVLOG.md) for the historical context.
 
-On 2026-11-15, this revision was tested on Linux x86-64 with Nim 2.2.4 and GCC. `nimble build` failed because the bundled `Resonance/src/resonance/perf_count_wrapper.c` uses Windows-only declarations unconditionally. `nimble test` passed its initial suites but stopped at the same compilation error in `tests/backends/tdevice_real.nim`. The application and end-to-end inference were therefore **not run on this Linux system**. An NVIDIA RTX 5080 was present; it was not tested for inference. These observations are specific to this environment.
+On 2026-11-15, Linux x86-64 with Nim 2.2.4 and GCC built and ran Isvik. The 38 test files completed, with environment-dependent cases skipped. With OpenVINO 2026.4.1, CPU device discovery and inference on a synthetic embedding IR passed, including multiple compile properties and cache export/import. LLM generation and tokenizer integration were not verified. An NVIDIA RTX 5080 was detected and excluded from `AUTO` by policy; it was not tested for inference.
 
 ## Getting started
 

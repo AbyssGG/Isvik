@@ -8,14 +8,18 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Nim
-        uses: jason56789/setup-nim@v1
+        uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: '2.2.0'
 

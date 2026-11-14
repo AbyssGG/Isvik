@@ -19,7 +19,7 @@ import std/[os, strutils, algorithm]
 # 包元信息(必须为字面量,见上文说明)
 # ---------------------------------------------------------------------------
 
-version       = "0.1.1"
+version       = "0.1.2"
 author        = "WANG"
 description   = "Local AI Runtime Platform for Intel AI PCs"
 license       = "Apache-2.0"

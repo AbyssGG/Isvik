@@ -34,9 +34,9 @@ Isvik 将用户界面与推理及硬件访问分层：命令行和 HTTP 服务�
 
 ## 平台与验证
 
-仓库的 CI 面向 Windows。历史记录描述了在 Windows x64、Intel Core Ultra 7 270K Plus 和 OpenVINO 2026.3 环境下的测试：已测试 CPU 文本生成和 Intel GPU 推理，以及 NPU 枚举和静态 IR 编译；这不代表 NPU 的通用文本生成功能已验证。历史细节见 [DEVLOG.md](DEVLOG.md)。
+仓库的 CI 配置覆盖 Windows 和 Linux。历史记录描述了在 Windows x64、Intel Core Ultra 7 270K Plus 和 OpenVINO 2026.3 环境下的测试：已测试 CPU 文本生成和 Intel GPU 推理，以及 NPU 枚举和静态 IR 编译；这不代表 NPU 的通用文本生成功能已验证。历史细节见 [DEVLOG.md](DEVLOG.md)。
 
-2026 年 11 月 15 日，在 Linux x86-64、Nim 2.2.4 和 GCC 环境测试了本次修订。`nimble build` 失败，原因是随仓库提供的 `Resonance/src/resonance/perf_count_wrapper.c` 无条件使用 Windows 专有声明。`nimble test` 的前几个测试套件通过，随后在 `tests/backends/tdevice_real.nim` 遇到同一编译错误并停止。因此，**本机未能启动应用或验证端到端推理**。机器配有 NVIDIA RTX 5080，但未测试其推理能力。以上结果仅适用于该环境。
+2026 年 11 月 15 日，在 Linux x86-64、Nim 2.2.4 和 GCC 环境完成构建与启动。38 个测试文件运行完成，其中依赖特定环境的用例按条件跳过。使用 OpenVINO 2026.4.1 验证了 CPU 设备发现和合成 embedding IR 推理，包括多属性编译及缓存导出、导入。尚未验证大语言模型生成与分词器集成。检测到 NVIDIA RTX 5080，但 `AUTO` 策略将其排除，未测试其推理能力。
 
 ## 快速开始
 

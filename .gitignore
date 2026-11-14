@@ -5,6 +5,9 @@ nimcache/
 dist/
 bin/
 
+# Linux CLI executable
+/isvik
+
 # 可执行与目标文件
 *.exe
 *.dll
