@@ -4,7 +4,7 @@ This guide covers the repository's Windows x64 workflow. For the architecture an
 
 ## Prerequisites
 
-- Windows x64, Nim 2.0 or later, Nimble, Git, and a GCC-based MinGW toolchain. `nim.cfg` selects GCC for the Windows ABI shim.
+- Windows x64, Nim 2.2.4 or later, Nimble, Git, and a GCC-based MinGW toolchain. `nim.cfg` selects GCC for the Windows ABI shim.
 - OpenVINO Runtime and Tokenizers compatible with the model and target device. The repository does not include these binaries.
 - A compatible OpenVINO IR model and tokenizer files. Model architecture, precision, device support, and license must be checked for the selected model.
 - Intel GPU or NPU drivers when using those devices. Availability and model compilation do not establish end-to-end generation support.
@@ -37,7 +37,7 @@ Check the script's supported selections and the model's own documentation before
 
 ## Linux status
 
-Linux x86-64 can build with Nim 2.0 or later and GCC. Install a compatible OpenVINO runtime separately and make `libopenvino_c.so` and its dependencies discoverable through the dynamic loader (for example, using the distribution's library configuration or `LD_LIBRARY_PATH`). The exact setup depends on the runtime distribution; some provide only a versioned library and require the usual unversioned development symlink. For tokenizer-based generation, supply `libopenvino_tokenizers.so` in a searched directory or set `ISVIK_TOKENIZERS_DLL` to its full path.
+Linux x86-64 can build with Nim 2.2.4 or later and GCC. Install a compatible OpenVINO runtime separately and make `libopenvino_c.so` and its dependencies discoverable through the dynamic loader (for example, using the distribution's library configuration or `LD_LIBRARY_PATH`). The exact setup depends on the runtime distribution; some provide only a versioned library and require the usual unversioned development symlink. For tokenizer-based generation, supply `libopenvino_tokenizers.so` in a searched directory or set `ISVIK_TOKENIZERS_DLL` to its full path.
 
 ```bash
 nimble build

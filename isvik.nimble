@@ -39,7 +39,7 @@ namedBin["isvik/cli/main"] = "isvik"
 # 因此这里不声明为 nimble 依赖,避免要求用户先把 Resonance 发布到 nimble。
 # 若将来 Resonance 独立发布,可改为 requires "resonance >= 0.1.0"。
 
-requires "nim >= 2.0.0"
+requires "nim >= 2.2.4"
 
 # ---------------------------------------------------------------------------
 # 任务

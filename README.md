@@ -40,7 +40,7 @@ On 2026-11-15, Linux x86-64 with Nim 2.2.4 and GCC built and ran Isvik. The 38 t
 
 ## Getting started
 
-For Windows x64, install Nim 2.0 or later, Nimble, Git, and a GCC-based MinGW toolchain. The project configuration selects GCC for the Windows ABI shim. Obtain the OpenVINO runtime and a compatible model separately; see the [installation guide](docs/installation.md) for prerequisites and limitations.
+For Windows x64, install Nim 2.2.4 or later, Nimble, Git, and a GCC-based MinGW toolchain. The project configuration selects GCC for the Windows ABI shim. Obtain the OpenVINO runtime and a compatible model separately; see the [installation guide](docs/installation.md) for prerequisites and limitations.
 
 ```powershell
 git clone https://github.com/AbyssGG/Isvik.git

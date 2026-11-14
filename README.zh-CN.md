@@ -40,7 +40,7 @@ Isvik 将用户界面与推理及硬件访问分层：命令行和 HTTP 服务�
 
 ## 快速开始
 
-在 Windows x64 上安装 Nim 2.0 或更高版本、Nimble、Git 和基于 GCC 的 MinGW 工具链。项目配置为 Windows ABI 封装指定了 GCC。OpenVINO 运行库和兼容模型需要单独准备；前提条件及限制见[安装指南](docs/installation.md)。
+在 Windows x64 上安装 Nim 2.2.4 或更高版本、Nimble、Git 和基于 GCC 的 MinGW 工具链。项目配置为 Windows ABI 封装指定了 GCC。OpenVINO 运行库和兼容模型需要单独准备；前提条件及限制见[安装指南](docs/installation.md)。
 
 ```powershell
 git clone https://github.com/AbyssGG/Isvik.git
