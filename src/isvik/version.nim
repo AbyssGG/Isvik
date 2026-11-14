@@ -14,7 +14,7 @@ const
   IsvikCliName* = "isvik"
     ## 正式 CLI 可执行文件名称。
 
-  IsvikVersion* = "0.1.0"
+  IsvikVersion* = "0.1.1"
     ## Isvik 语义化版本号。
 
   IsvikDescription* = "Local AI Runtime Platform for Intel AI PCs"
