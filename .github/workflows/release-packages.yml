@@ -30,6 +30,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag || github.ref }}
+          path: source
+
+      - name: Checkout package tooling
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: package-tools
 
       - name: Setup Nim
         uses: jiro4989/setup-nim-action@v2
@@ -37,16 +44,18 @@ jobs:
           nim-version: '2.2.4'
 
       - name: Build executable
+        working-directory: source
         run: nimble build
 
       - name: Package executable
-        run: python scripts/package_release.py "${{ inputs.tag || github.ref_name }}" "${{ matrix.platform }}"
+        working-directory: source
+        run: python ../package-tools/scripts/package_release.py "${{ inputs.tag || github.ref_name }}" "${{ matrix.platform }}"
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: isvik-${{ matrix.platform }}
-          path: dist/*.zip
+          path: source/dist/*.zip
           if-no-files-found: error
           retention-days: 7
 
